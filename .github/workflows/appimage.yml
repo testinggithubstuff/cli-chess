@@ -21,13 +21,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install AppImage dependencies
+      - name: Install cli-chess
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libfuse2 zsync
-
-      - name: Install AppImage builder
-        run: python -m pip install "appimage==2.0.1"
+          python -m pip install .
 
       - name: Determine version
         id: version
@@ -38,18 +34,28 @@ jobs:
             echo "version=dev-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Download quick-sharun
+        run: |
+          curl -L \
+            https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/main/useful-tools/quick-sharun.sh \
+            -o quick-sharun
+          chmod +x quick-sharun
+
       - name: Build AppImage
-        run: python -m appimage.build --python 3.11
-
-      - name: Rename AppImage
+        env:
+          ICON: ${{ github.workspace }}/cli-chess.png
+          DESKTOP: ${{ github.workspace }}/cli-chess.desktop
+          OUTPATH: ${{ github.workspace }}/dist
+          OUTNAME: cli-chess-${{ steps.version.outputs.version }}-x86_64.AppImage
         run: |
-          mv dist/cli-chess-x86_64.AppImage \
-             "dist/cli-chess-${{ steps.version.outputs.version }}-x86_64.AppImage"
+          mkdir -p dist
 
-      - name: Create zsync file
+          ./quick-sharun "$(which cli-chess)"
+          ./quick-sharun --make-appimage
+
+      - name: Test AppImage
         run: |
-          zsyncmake dist/*.AppImage
-          mv *.AppImage.zsync dist/
+          ./quick-sharun --test dist/*.AppImage
 
       - name: Upload AppImage artifact
         uses: actions/upload-artifact@v4
