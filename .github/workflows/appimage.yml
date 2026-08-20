@@ -60,6 +60,7 @@ jobs:
 
       - name: Build AppImage
         env:
+          DEPLOY_PYTHON: 1
           ICON: ${{ github.workspace }}/packaging/appimage/cli-chess.png
           DESKTOP: ${{ github.workspace }}/packaging/appimage/cli-chess.desktop
           OUTPATH: ${{ github.workspace }}/dist
