@@ -71,7 +71,7 @@ jobs:
 
       - name: Test AppImage
         run: |
-          ./quick-sharun --test ./dist/*.AppImage
+          ./quick-sharun --simple-test ./dist/*.AppImage
 
       - name: Upload AppImage artifact
         uses: actions/upload-artifact@v4
