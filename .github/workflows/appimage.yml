@@ -51,12 +51,12 @@ jobs:
             echo "version=dev-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Download quick-sharun
-        run: |
-          curl -L \
-            https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/main/useful-tools/quick-sharun.sh \
-            -o quick-sharun
-          chmod +x quick-sharun
+      # - name: Download quick-sharun
+      #   run: |
+      #     curl -L \
+      #       https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/main/useful-tools/quick-sharun.sh \
+      #       -o quick-sharun
+      #     chmod +x quick-sharun
 
       - name: Build AppImage
         env:
